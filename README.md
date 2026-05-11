@@ -3,7 +3,7 @@
 Modern fitness tracking and workout management web application focused on responsive UI, clean interaction design, and frontend user experience.
 
 ## Live Demo
-[View Live Project](track-pay-gym.netlify.app)
+[View Live Project](https://track-pay-gym.netlify.app)
 
 ## Features
 - Responsive modern user interface
