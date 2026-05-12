@@ -1,176 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>GymTrack – Member Payment System</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>TrackPay – Gym Management</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="header-inner">
-      <div class="logo">
-        <span class="logo-icon">💪</span>
-        <span class="logo-text">GymTrack</span>
+<!-- SIDEBAR (Desktop) -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect x="2" y="10" width="6" height="8" rx="2" fill="#f5a623"/>
+        <rect x="20" y="10" width="6" height="8" rx="2" fill="#f5a623"/>
+        <rect x="7" y="12" width="14" height="4" rx="2" fill="#fff"/>
+        <rect x="11" y="7" width="6" height="14" rx="2" fill="#f5a623" opacity="0.7"/>
+      </svg>
+    </div>
+    <span class="logo-wordmark">TrackPay</span>
+  </div>
+  <nav class="sidebar-nav">
+    <a class="nav-item active" data-page="dashboard" href="#">⚡<span>Dashboard</span></a>
+    <a class="nav-item" data-page="members" href="#">👥<span>Members</span></a>
+    <a class="nav-item" data-page="attendance" href="#">📅<span>Attendance</span></a>
+    <a class="nav-item" data-page="expenses" href="#">💸<span>Expenses</span></a>
+    <a class="nav-item" data-page="reports" href="#">📊<span>Reports</span></a>
+    <a class="nav-item" data-page="settings" href="#">⚙️<span>Settings</span></a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-gym-name" id="sidebarGymName">My Gym</div>
+    <div class="sidebar-version">TrackPay v2.0</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main-wrapper">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="mobile-logo">
+        <svg width="20" height="20" viewBox="0 0 28 28" fill="none">
+          <rect x="2" y="10" width="6" height="8" rx="2" fill="#f5a623"/>
+          <rect x="20" y="10" width="6" height="8" rx="2" fill="#f5a623"/>
+          <rect x="7" y="12" width="14" height="4" rx="2" fill="#fff"/>
+          <rect x="11" y="7" width="6" height="14" rx="2" fill="#f5a623" opacity="0.7"/>
+        </svg>
+        <span>TrackPay</span>
       </div>
-      <button class="btn-add" id="openAddModal">+ Add Member</button>
+      <h1 class="page-title" id="pageTitle">Dashboard</h1>
+    </div>
+    <div class="topbar-right">
+      <button class="icon-btn" id="notifBtn" title="Notifications">
+        🔔<span class="notif-dot" id="notifDot" style="display:none"></span>
+      </button>
+      <div class="profile-chip">
+        <div class="profile-avatar" id="profileAvatar">G</div>
+      </div>
     </div>
   </header>
 
-  <!-- DASHBOARD STATS -->
-  <section class="dashboard">
-    <div class="stat-card" id="stat-total">
-      <div class="stat-number" id="totalCount">0</div>
-      <div class="stat-label">Total Members</div>
+  <!-- ── PAGE: DASHBOARD ── -->
+  <section class="page active" id="page-dashboard">
+    <div class="hero-banner">
+      <div class="hero-bg-grid"></div>
+      <div class="hero-content">
+        <p class="hero-sub">Good to see you 👋</p>
+        <h2 class="hero-title">Welcome Back</h2>
+        <p class="hero-tagline">Track. Manage. Grow.</p>
+      </div>
+      <div class="hero-pill">
+        <div class="hero-pill-num" id="heroActive">–</div>
+        <div class="hero-pill-lbl">Active Members</div>
+      </div>
     </div>
-    <div class="stat-card active" id="stat-active">
-      <div class="stat-number" id="activeCount">0</div>
-      <div class="stat-label">Active</div>
+
+    <div class="stats-grid">
+      <div class="stat-card clickable" data-goto="members" data-filter="all">
+        <div class="stat-icon-wrap" style="--ic:#f5a623">👥</div>
+        <div><div class="stat-num" id="d-total">0</div><div class="stat-lbl">Total Members</div></div>
+      </div>
+      <div class="stat-card clickable" data-goto="members" data-filter="active">
+        <div class="stat-icon-wrap" style="--ic:#22c55e">✅</div>
+        <div><div class="stat-num" id="d-active">0</div><div class="stat-lbl">Active</div></div>
+      </div>
+      <div class="stat-card clickable" data-goto="members" data-filter="expired">
+        <div class="stat-icon-wrap" style="--ic:#ef4444">⚠️</div>
+        <div><div class="stat-num" id="d-expired">0</div><div class="stat-lbl">Expired</div></div>
+      </div>
+      <div class="stat-card clickable" data-goto="members" data-filter="unpaid">
+        <div class="stat-icon-wrap" style="--ic:#eab308">💰</div>
+        <div><div class="stat-num" id="d-unpaid">0</div><div class="stat-lbl">Pending Pay</div></div>
+      </div>
+      <div class="stat-card wide">
+        <div class="stat-icon-wrap" style="--ic:#a78bfa">📈</div>
+        <div><div class="stat-num" id="d-revenue">₹0</div><div class="stat-lbl">Monthly Revenue</div></div>
+      </div>
     </div>
-    <div class="stat-card expired" id="stat-expired">
-      <div class="stat-number" id="expiredCount">0</div>
-      <div class="stat-label">Expired</div>
+
+    <div class="section-label">Quick Actions</div>
+    <div class="quick-actions">
+      <button class="qa-btn" id="qa-addMember"><span>➕</span>Add Member</button>
+      <button class="qa-btn" id="qa-markPayment"><span>💳</span>Mark Payment</button>
+      <button class="qa-btn" id="qa-attendance"><span>📅</span>Attendance</button>
+      <button class="qa-btn" id="qa-reminder"><span>💬</span>Reminder</button>
+      <button class="qa-btn" id="qa-reports"><span>📊</span>Reports</button>
+      <button class="qa-btn" id="qa-backup"><span>☁️</span>Backup</button>
     </div>
-    <div class="stat-card unpaid" id="stat-unpaid">
-      <div class="stat-number" id="unpaidCount">0</div>
-      <div class="stat-label">Unpaid</div>
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Member Status</div>
+        <canvas id="pieChart" height="180"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Revenue (6 Months)</div>
+        <canvas id="revenueChart" height="180"></canvas>
+      </div>
+    </div>
+
+    <div class="section-label">Expiring Soon <span class="badge-count" id="expiringSoonBadge">0</span></div>
+    <div id="expiringList" class="expiring-list"><p class="empty-mini">No members expiring soon 🎉</p></div>
+  </section>
+
+  <!-- ── PAGE: MEMBERS ── -->
+  <section class="page" id="page-members">
+    <div class="page-toolbar">
+      <input type="text" class="search-input" id="memberSearch" placeholder="🔍  Search name or phone…"/>
+      <button class="btn-primary" id="openAddMember">＋ Add</button>
+    </div>
+    <div class="filter-bar">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="active">Active</button>
+      <button class="filter-tab" data-filter="expired">Expired</button>
+      <button class="filter-tab" data-filter="unpaid">Unpaid</button>
+    </div>
+    <div class="member-count-row"><span id="memberCountLabel">0 members</span></div>
+    <div class="members-grid" id="membersGrid">
+      <div class="empty-state"><div class="empty-icon">🏋️</div><p>No members yet.<br/>Tap <strong>+ Add</strong> to get started.</p></div>
     </div>
   </section>
 
-  <!-- SEARCH + FILTER -->
-  <section class="controls">
-    <input type="text" id="searchInput" class="search-input" placeholder="🔍  Search by name or phone…" />
-    <div class="filter-tabs">
-      <button class="tab active" data-filter="all">All</button>
-      <button class="tab" data-filter="active">Active</button>
-      <button class="tab" data-filter="expired">Expired</button>
-      <button class="tab" data-filter="unpaid">Unpaid</button>
+  <!-- ── PAGE: ATTENDANCE ── -->
+  <section class="page" id="page-attendance">
+    <div class="attend-header">
+      <div class="attend-date" id="attendDate"></div>
+      <div class="attend-summary" id="attendSummary">Present: 0 | Absent: 0</div>
+    </div>
+    <div class="attend-list" id="attendList"><div class="empty-state"><div class="empty-icon">📅</div><p>No members to mark attendance.</p></div></div>
+  </section>
+
+  <!-- ── PAGE: EXPENSES ── -->
+  <section class="page" id="page-expenses">
+    <div class="page-toolbar">
+      <div class="section-label" style="margin:0">Expenses</div>
+      <button class="btn-primary" id="openAddExpense">＋ Add</button>
+    </div>
+    <div class="exp-summary-row">
+      <div class="exp-sum-card"><div class="exp-sum-num" id="expThisMonth">₹0</div><div class="exp-sum-lbl">This Month</div></div>
+      <div class="exp-sum-card"><div class="exp-sum-num" id="expTotal">₹0</div><div class="exp-sum-lbl">All Time</div></div>
+    </div>
+    <div class="expense-list" id="expenseList"><div class="empty-state"><div class="empty-icon">💸</div><p>No expenses yet.</p></div></div>
+  </section>
+
+  <!-- ── PAGE: REPORTS ── -->
+  <section class="page" id="page-reports">
+    <div class="reports-grid">
+      <div class="report-card" id="rpt-members"><div class="rpt-icon">👥</div><div class="rpt-title">Member Report</div><div class="rpt-desc">All members with status, fees & dates</div><button class="btn-outline">Download CSV</button></div>
+      <div class="report-card" id="rpt-payments"><div class="rpt-icon">💳</div><div class="rpt-title">Payment Report</div><div class="rpt-desc">Paid vs unpaid breakdown</div><button class="btn-outline">Download CSV</button></div>
+      <div class="report-card" id="rpt-expired"><div class="rpt-icon">⚠️</div><div class="rpt-title">Expired Members</div><div class="rpt-desc">All expired members for follow-up</div><button class="btn-outline">Download CSV</button></div>
+      <div class="report-card" id="rpt-expenses"><div class="rpt-icon">💸</div><div class="rpt-title">Expense Report</div><div class="rpt-desc">All expenses by category</div><button class="btn-outline">Download CSV</button></div>
+      <div class="report-card" id="rpt-backup"><div class="rpt-icon">☁️</div><div class="rpt-title">Backup Data</div><div class="rpt-desc">Download full backup as JSON</div><button class="btn-outline btn-accent-outline">Backup Now</button></div>
+      <div class="report-card" id="rpt-restore"><div class="rpt-icon">♻️</div><div class="rpt-title">Restore Data</div><div class="rpt-desc">Restore from a previous JSON backup</div><button class="btn-outline" id="triggerRestore">Choose File</button><input type="file" id="restoreFile" accept=".json" style="display:none"/></div>
     </div>
   </section>
 
-  <!-- MEMBER LIST -->
-  <section class="member-list" id="memberList">
-    <div class="empty-state" id="emptyState">
-      <div class="empty-icon">🏋️</div>
-      <p>No members yet.<br/>Tap <strong>+ Add Member</strong> to get started.</p>
+  <!-- ── PAGE: SETTINGS ── -->
+  <section class="page" id="page-settings">
+    <div class="settings-wrap">
+      <div class="settings-section-label">Gym Profile</div>
+      <div class="form-group"><label>Gym Name</label><input type="text" id="s-gymName" placeholder="Iron Zone Gym"/></div>
+      <div class="form-group"><label>Owner Name</label><input type="text" id="s-ownerName" placeholder="Ravi Kumar"/></div>
+      <div class="form-group"><label>Phone</label><input type="tel" id="s-phone" placeholder="9876543210"/></div>
+      <div class="settings-section-label">Preferences</div>
+      <div class="form-group"><label>Default Plan (Months)</label>
+        <select id="s-defaultDur">
+          <option value="1">1 Month</option><option value="3">3 Months</option>
+          <option value="6">6 Months</option><option value="12">12 Months</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Expiry Reminder (Days before)</label>
+        <select id="s-reminderDays">
+          <option value="3">3 Days</option><option value="5" selected>5 Days</option>
+          <option value="7">7 Days</option><option value="10">10 Days</option>
+        </select>
+      </div>
+      <button class="btn-primary full-width" id="saveSettings">💾 Save Settings</button>
+      <div class="settings-section-label" style="margin-top:28px;">Danger Zone</div>
+      <button class="btn-danger full-width" id="clearAllData">🗑️ Clear All Data</button>
     </div>
   </section>
 
-  <!-- ADD MEMBER MODAL -->
-  <div class="modal-overlay" id="addModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2>Add New Member</h2>
-        <button class="modal-close" id="closeAddModal">✕</button>
+</div><!-- /main-wrapper -->
+
+<!-- BOTTOM NAV (Mobile) -->
+<nav class="bottom-nav">
+  <a class="bnav-item active" data-page="dashboard" href="#">⚡<span>Home</span></a>
+  <a class="bnav-item" data-page="members" href="#">👥<span>Members</span></a>
+  <a class="bnav-item" data-page="attendance" href="#">📅<span>Attend</span></a>
+  <a class="bnav-item" data-page="expenses" href="#">💸<span>Expenses</span></a>
+  <a class="bnav-item" data-page="settings" href="#">⚙️<span>Settings</span></a>
+</nav>
+
+<!-- MODALS -->
+
+<!-- Add Member -->
+<div class="modal-overlay" id="modal-addMember">
+  <div class="modal">
+    <div class="modal-header"><h2>Add Member</h2><button class="modal-close" data-close="modal-addMember">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Full Name *</label><input type="text" id="am-name" placeholder="Ravi Kumar"/></div>
+      <div class="form-group"><label>Phone *</label><input type="tel" id="am-phone" placeholder="9876543210"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Join Date *</label><input type="date" id="am-join"/></div>
+        <div class="form-group"><label>Duration</label>
+          <select id="am-duration"><option value="1">1 Month</option><option value="2">2 Months</option><option value="3">3 Months</option><option value="6">6 Months</option><option value="12">12 Months</option></select>
+        </div>
       </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label>Full Name *</label>
-          <input type="text" id="memberName" placeholder="e.g. Ravi Kumar" />
+      <div class="form-row">
+        <div class="form-group"><label>Fee (₹) *</label><input type="number" id="am-fee" placeholder="1500"/></div>
+        <div class="form-group"><label>Plan Name</label><input type="text" id="am-plan" placeholder="Monthly"/></div>
+      </div>
+      <div class="form-group"><label>Payment Status</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="am-paid" data-val="paid">✅ Paid</button>
+          <button class="toggle-btn" id="am-unpaid" data-val="unpaid">❌ Unpaid</button>
         </div>
-        <div class="form-group">
-          <label>Phone Number *</label>
-          <input type="tel" id="memberPhone" placeholder="e.g. 9876543210" />
+      </div>
+      <div class="form-error" id="am-error"></div>
+      <button class="btn-primary full-width" id="submitAddMember">Add Member</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Member -->
+<div class="modal-overlay" id="modal-editMember">
+  <div class="modal">
+    <div class="modal-header"><h2>Edit Member</h2><button class="modal-close" data-close="modal-editMember">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="em-id"/>
+      <div class="form-group"><label>Full Name *</label><input type="text" id="em-name"/></div>
+      <div class="form-group"><label>Phone *</label><input type="tel" id="em-phone"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Join Date *</label><input type="date" id="em-join"/></div>
+        <div class="form-group"><label>Duration</label>
+          <select id="em-duration"><option value="1">1 Month</option><option value="2">2 Months</option><option value="3">3 Months</option><option value="6">6 Months</option><option value="12">12 Months</option></select>
         </div>
-        <div class="form-group">
-          <label>Join Date *</label>
-          <input type="date" id="memberJoinDate" />
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Fee (₹) *</label><input type="number" id="em-fee"/></div>
+        <div class="form-group"><label>Plan Name</label><input type="text" id="em-plan"/></div>
+      </div>
+      <div class="form-group"><label>Payment Status</label>
+        <div class="toggle-group">
+          <button class="toggle-btn" id="em-paid" data-val="paid">✅ Paid</button>
+          <button class="toggle-btn" id="em-unpaid" data-val="unpaid">❌ Unpaid</button>
         </div>
-        <div class="form-group">
-          <label>Duration</label>
-          <select id="memberDuration">
-            <option value="1">1 Month</option>
-            <option value="2">2 Months</option>
-            <option value="3">3 Months</option>
-            <option value="6">6 Months</option>
-            <option value="12">12 Months</option>
-          </select>
+      </div>
+      <div class="form-error" id="em-error"></div>
+      <button class="btn-primary full-width" id="submitEditMember">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mark Payment -->
+<div class="modal-overlay" id="modal-markPayment">
+  <div class="modal modal-sm">
+    <div class="modal-header"><h2>Mark Payment</h2><button class="modal-close" data-close="modal-markPayment">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Member</label><select id="mp-member"></select></div>
+      <div class="form-row">
+        <div class="form-group"><label>Amount (₹)</label><input type="number" id="mp-amount" placeholder="1500"/></div>
+        <div class="form-group"><label>Date</label><input type="date" id="mp-date"/></div>
+      </div>
+      <div class="form-group"><label>Type</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="mp-full" data-val="full">Full</button>
+          <button class="toggle-btn" id="mp-partial" data-val="partial">Partial</button>
         </div>
-        <div class="form-group">
-          <label>Fee Amount (₹) *</label>
-          <input type="number" id="memberFee" placeholder="e.g. 1500" />
-        </div>
-        <div class="form-group">
-          <label>Payment Status</label>
-          <div class="toggle-group">
-            <button class="toggle-btn active" id="togglePaid" data-value="paid">✅ Paid</button>
-            <button class="toggle-btn" id="toggleUnpaid" data-value="unpaid">❌ Unpaid</button>
-          </div>
-        </div>
-        <div class="form-error" id="formError"></div>
-        <button class="btn-submit" id="submitMember">Add Member</button>
+      </div>
+      <button class="btn-primary full-width" id="submitMarkPayment">Save Payment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Expense -->
+<div class="modal-overlay" id="modal-addExpense">
+  <div class="modal modal-sm">
+    <div class="modal-header"><h2>Add Expense</h2><button class="modal-close" data-close="modal-addExpense">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Description *</label><input type="text" id="exp-desc" placeholder="Equipment repair"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Amount (₹) *</label><input type="number" id="exp-amount" placeholder="500"/></div>
+        <div class="form-group"><label>Date</label><input type="date" id="exp-date"/></div>
+      </div>
+      <div class="form-group"><label>Category</label>
+        <select id="exp-category">
+          <option>Equipment</option><option>Electricity</option><option>Rent</option>
+          <option>Salary</option><option>Maintenance</option><option>Marketing</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-error" id="exp-error"></div>
+      <button class="btn-primary full-width" id="submitAddExpense">Add Expense</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirm -->
+<div class="modal-overlay" id="modal-delete">
+  <div class="modal modal-xs">
+    <div class="modal-header"><h2>Confirm Delete</h2><button class="modal-close" data-close="modal-delete">✕</button></div>
+    <div class="modal-body">
+      <p id="deleteConfirmText" style="color:var(--text-muted);font-size:15px;line-height:1.6;"></p>
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <button class="btn-outline full-width" data-close="modal-delete">Cancel</button>
+        <button class="btn-danger full-width" id="confirmDelete">Delete</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- EDIT MEMBER MODAL -->
-  <div class="modal-overlay" id="editModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2>Edit Member</h2>
-        <button class="modal-close" id="closeEditModal">✕</button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" id="editMemberId" />
-        <div class="form-group">
-          <label>Full Name *</label>
-          <input type="text" id="editMemberName" />
-        </div>
-        <div class="form-group">
-          <label>Phone Number *</label>
-          <input type="tel" id="editMemberPhone" />
-        </div>
-        <div class="form-group">
-          <label>Join Date *</label>
-          <input type="date" id="editMemberJoinDate" />
-        </div>
-        <div class="form-group">
-          <label>Duration</label>
-          <select id="editMemberDuration">
-            <option value="1">1 Month</option>
-            <option value="2">2 Months</option>
-            <option value="3">3 Months</option>
-            <option value="6">6 Months</option>
-            <option value="12">12 Months</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Fee Amount (₹) *</label>
-          <input type="number" id="editMemberFee" />
-        </div>
-        <div class="form-group">
-          <label>Payment Status</label>
-          <div class="toggle-group">
-            <button class="toggle-btn" id="editTogglePaid" data-value="paid">✅ Paid</button>
-            <button class="toggle-btn" id="editToggleUnpaid" data-value="unpaid">❌ Unpaid</button>
-          </div>
-        </div>
-        <div class="form-error" id="editFormError"></div>
-        <button class="btn-submit" id="submitEditMember">Save Changes</button>
-      </div>
-    </div>
-  </div>
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
-  <!-- DELETE CONFIRM MODAL -->
-  <div class="modal-overlay" id="deleteModal">
-    <div class="modal modal-sm">
-      <div class="modal-header">
-        <h2>Delete Member?</h2>
-        <button class="modal-close" id="closeDeleteModal">✕</button>
-      </div>
-      <div class="modal-body">
-        <p id="deleteConfirmText">Are you sure you want to delete this member?</p>
-        <div class="delete-actions">
-          <button class="btn-cancel" id="cancelDelete">Cancel</button>
-          <button class="btn-delete-confirm" id="confirmDelete">Delete</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
