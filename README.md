@@ -2,7 +2,6 @@
 
 Modern fitness tracking and workout management web application focused on responsive UI, clean interaction design, and frontend user experience.
 
-Portfolio: https://afreed.online
 
 ## Live Demo
 [View Live Project](https://track-pay-gym.netlify.app)
@@ -25,10 +24,11 @@ This project was built to explore responsive frontend development, interaction-f
 
 
 
-## GitHub
-https://github.com/Afreednoor
-
 ## Author
 Noorul Afreed
 
+
 AI & Interaction Developer focused on frontend systems, accessibility-focused applications, and human-centered digital experiences.
+
+
+Portfolio: https://afreed.online
