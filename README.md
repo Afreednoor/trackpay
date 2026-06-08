@@ -2,6 +2,8 @@
 
 Modern fitness tracking and workout management web application focused on responsive UI, clean interaction design, and frontend user experience.
 
+Portfolio: https://afreed.online
+
 ## Live Demo
 [View Live Project](https://track-pay-gym.netlify.app)
 
